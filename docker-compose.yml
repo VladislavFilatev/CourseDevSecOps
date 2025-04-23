@@ -1,0 +1,47 @@
+services:
+  bot:
+    build: .
+    container_name: bot
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - .\app:/app
+    networks:
+      - bd_temp
+    depends_on:
+      - bd
+  bd:
+    image: postgres:15-alpine
+    container_name: bd
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - bd_temp:/var/lib/postgresql/data
+    networks:
+      - bd_temp
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - bd
+    ports:
+      - "80:80"
+    networks:
+      - bd_temp
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+
+volumes:
+  bd_temp:
+    external: true  
+  pgadmin_data:
+
+networks:
+  bd_temp:
+    driver: bridge

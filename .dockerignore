@@ -2,3 +2,6 @@
 /dockerfile
 /README.md
 .git/
+/.gitignore
+venv
+/.env
